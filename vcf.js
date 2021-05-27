@@ -285,13 +285,12 @@ VCF.buildUI=function(id){ // main UI
 		if(VCF.urlParms.vcf){
 			// if from DropBox, redirect link to CORS served content
 			var urlVCF=VCF.urlParms.vcf.replace('www.dropbox.com','dl.dropboxusercontent.com').replace('dl=0','dl=1')
-			$.get(urlVCF).then(function(txt){
+			//$.get(urlVCF).then(function(txt){
+			fetch(urlVCF).then(x=>x.text().then(function(txt){
 				console.log('parsing VCF from '+urlVCF)
 				//VCF.dir.vcfs[this.i]=new VCF(txt,VCF.dir.ids[this.i],this.i);
 				VCF.dir.vcfs[this.i]=new VCF(txt,urlVCF,this.i);
-				//new VCF(txt)
-
-			})
+			}))
 			4
 		}
 	}
@@ -309,11 +308,13 @@ VCF.readFiles=function(files){
 		VCF.startUI(fname); // a div for this vcf file
 		console.log('started parsing '+fname+' ...');
 		fun[i]=function(url,fname,i,j){
-			$.get(files[i].link)
-		 	.then(function(txt){
-		 		VCF.dir.vcfs[j]=new VCF(txt,VCF.dir.ids[j],j);
-				console.log('... done parsing '+i+'/'+n+': '+fname);
-			})			
+			fetch(files[i].link)
+			.then(x=x.text()
+				.then(function(txt){
+					VCF.dir.vcfs[j]=new VCF(txt,VCF.dir.ids[j],j);
+					console.log('... done parsing '+i+'/'+n+': '+fname);
+				})
+			)			
 		}
 		fun[i](files[i].link,fname,i,j)		
 	}
@@ -418,7 +419,8 @@ VCF.modules=[
 	name:'Modules',
 	url:'Modules.js',
 	fun:function(div){
-		var divBB = jQuery('#divBodyBody',div)[0];
+		//var divBB = jQuery('#divBodyBody',div)[0];
+		var divBB = div.querySelector('#divBodyBody')
 		divBB.innerHTML=""; // clear
 	}
 },

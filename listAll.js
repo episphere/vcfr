@@ -7,7 +7,8 @@ console.log('loaded listAll.js')
 VCFmodule=function(div){
     //lala = div
     console.log('listAll',div);
-    var divBB = jQuery('#divBodyBody',div)[0];   
+    //var divBB = jQuery('#divBodyBody',div)[0];
+    var divBB = div.querySelector('#divBodyBody');   
     divBB.textContent='... listing everything ... :-) :-)';
     divBB.style.color='green';
     divBB.innerHTML=""; // clear
@@ -44,8 +45,10 @@ VCFmodule=function(div){
     div.fieldSelector=function(){
         var i = this.i;
         var F = Object.getOwnPropertyNames(this.dt.body); // fields
-        var tr = jQuery('#listVariantCalls > thead > tr',this)[0];
+        //var tr = jQuery('#listVariantCalls > thead > tr',this)[0];
+        var tr = this.querySelector('#listVariantCalls > thead > tr')
         var th = document.createElement('th');tr.appendChild(th);
+        //debugger
         var se = document.createElement('select');th.appendChild(se);
         se.dt = this.dt.body;
         var opt = document.createElement('option');se.appendChild(opt);opt.textContent='Parm:';
